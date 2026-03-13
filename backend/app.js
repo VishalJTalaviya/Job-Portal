@@ -39,6 +39,3 @@ dbConnection();
 
 app.use(errorMiddleware);
 export default app;
-
-// new5
-// new 21
