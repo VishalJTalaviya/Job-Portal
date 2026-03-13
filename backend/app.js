@@ -39,5 +39,3 @@ dbConnection();
 
 app.use(errorMiddleware);
 export default app;
-
-// develop comment
