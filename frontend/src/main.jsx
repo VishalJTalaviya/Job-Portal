@@ -29,6 +29,3 @@ ReactDOM.createRoot(document.getElementById("root")).render(
     <AppWrapper />
   </React.StrictMode>
 );
-
-// vt-opash
-//new
