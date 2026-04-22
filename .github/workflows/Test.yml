@@ -15,11 +15,12 @@ jobs:
       - name: Slack Notification - Deployment Started
         uses: slackapi/slack-github-action@v2.1.1
         with:
-          webhook: ${{ secrets.SLACK_WEBHOOK_URL }}
+          webhook: ${{ secrets.SLACK_WEBHOOK_DEV_URL }}
           webhook-type: incoming-webhook
           payload: |
-            text: "Deployment started 🚀 for ${{ github.repository }}"
-              
+            {"text": "Deployment started 🚀 for ${{ github.repository }} on branch `develop`"}
+
+      
       - name: Checkout code
         uses: actions/checkout@v4
         
@@ -49,22 +50,23 @@ jobs:
         if: always()
         uses: slackapi/slack-github-action@v2.1.1
         with:
-          webhook: ${{ secrets.SLACK_WEBHOOK_URL }}
+          webhook: ${{ secrets.SLACK_WEBHOOK_DEV_URL }}
           webhook-type: incoming-webhook
           payload: |
-            text: "Deployment ${{ job.status }} ${{ job.status == 'success' && '✅' || job.status == 'failure' && '❌' || '⚠️' }} for ${{ github.repository }}"
-            attachments:
-              - color: "${{ job.status == 'success' && '#2eb886' || job.status == 'failure' && '#a30200' || '#ffcc00' }}"
-                blocks:
-                  - type: section
-                    text:
-                      type: mrkdwn
-                      text: |
-                        *Deployment Status:* `${{ job.status }}` ${{ job.status == 'success' && '✅' || job.status == 'failure' && '❌' || '⚠️' }}
-                        *Repository:* ${{ github.repository }}
-                        *Branch:* `${{ github.ref_name }}`
-                        *Commit:* `${{ github.sha }}`
-                        *Author:* ${{ github.actor }}
-                        *Details:* <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|View Logs>
-
-      
+            {
+              "text": "Deployment ${{ job.status }} ${{ job.status == 'success' && '✅' || job.status == 'failure' && '❌' || '⚠️' }} for ${{ github.repository }}",
+              "attachments": [
+                {
+                  "color": "${{ job.status == 'success' && '#3D9BF0' || job.status == 'failure' && '#FF6B35' || '#9B59B6' }}",
+                  "blocks": [
+                    {
+                      "type": "section",
+                      "text": {
+                        "type": "mrkdwn",
+                        "text": "*Deployment Status:* `${{ job.status }}` ${{ job.status == 'success' && '✅' || job.status == 'failure' && '❌' || '⚠️' }}\n*Repository:* ${{ github.repository }}\n*Branch:* `${{ github.ref_name }}`\n*Commit:* `${{ github.sha }}`\n*Author:* ${{ github.actor }}\n*Details:* <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|View Logs>"
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
